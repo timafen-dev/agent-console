@@ -102,6 +102,7 @@ test("the collector reads only the retention window, and a delivered spool is em
   assert.equal(delivered.length, 3);
   assert.ok(delivered.every((r) => !JSON.stringify(r).includes("/tmp/new")), "a hook's view of the path reached a record");
   assert.ok(labels.some((l) => l.cwd === "/tmp/new"), "the hub's own machine can name its lanes");
+  assert.ok(labels.some((l) => l.cwd === "/tmp/new" && l.root === logs && l.tool === "claude-code"), "a label says which root the transcript came from");
   assert.equal(fs.statSync(path.join(directory, "records-v2.ndjson")).size, 0, "the delivered spool was emptied");
   const again = await runOnce(options);
   assert.equal(again.emitted, 0, "nothing is delivered twice after compaction");
